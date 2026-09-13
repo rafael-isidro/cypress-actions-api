@@ -1,4 +1,14 @@
 {
+  "name": "reqres-api-tests",
+  "version": "1.0.0",
+  "description": "Suíte de testes automatizados de API para reqres.in usando Cypress",
+  "scripts": {
+    "test": "cypress run",
+    "test:open": "cypress open",
+    "test:users": "cypress run --spec \"cypress/e2e/users/**/*.cy.js\"",
+    "test:auth": "cypress run --spec \"cypress/e2e/auth/**/*.cy.js\"",
+    "test:resources": "cypress run --spec \"cypress/e2e/resources/**/*.cy.js\""
+  },
   "devDependencies": {
     "cypress": "^16.0.0"
   }
