@@ -23,7 +23,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
 
       - name: Install dependencies
@@ -32,13 +32,19 @@ jobs:
       - name: Run Cypress
         run: npm test
 
+      - name: List report files
+        if: always()
+        run: |
+          echo "Arquivos gerados:"
+          find cypress/reports -type f 2>/dev/null || true
+
       - name: Upload Cypress JSON Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: cypress-json-results
-          path: cypress/reports/html/.jsons/
-
+          path: cypress/reports/.jsons/
+          if-no-files-found: error
 
   report:
     runs-on: ubuntu-latest
@@ -54,7 +60,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
 
       - name: Install dependencies
@@ -64,17 +70,26 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: cypress-json-results
-          path: cypress/reports/html/.jsons/
+          path: cypress/reports/.jsons/
+
+      - name: List downloaded files
+        run: |
+          echo "JSONs baixados:"
+          find cypress/reports -type f
 
       - name: Generate Mochawesome Report
-        run: npx mochawesome-merge "cypress/reports/html/.jsons/*.json" > cypress/reports/html/report.json
+        run: |
+          npx mochawesome-merge "cypress/reports/.jsons/*.json" > cypress/reports/report.json
 
       - name: Generate HTML Report
-        run: npx marge cypress/reports/html/report.json -f cypress-report -o cypress/reports/html
+        run: |
+          npx marge cypress/reports/report.json \
+            -f cypress-report \
+            -o cypress/reports
 
       - name: Upload HTML Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: cypress-report
-          path: cypress/reports/html/
+          path: cypress/reports/
