@@ -63,7 +63,7 @@ jobs:
           path: cypress/reports/html/.jsons/
 
       - name: Generate Mochawesome Report
-        run: npm run report:generate
+        run: npm run report
 
       - name: Upload HTML Report
         if: always()
