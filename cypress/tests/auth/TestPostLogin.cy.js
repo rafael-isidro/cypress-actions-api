@@ -2,7 +2,7 @@ import { AuthClient } from "../../support/apiClients/authClient";
 
 describe("POST - /login - Should authenticate the user", () => {
   beforeEach(function loadFixture() {
-    cy.fixture("auth").as("authData");
+    cy.fixture("login").as("authData");
   });
 
   it("TC-001: Should authenticate the user with valid credentials", function () {

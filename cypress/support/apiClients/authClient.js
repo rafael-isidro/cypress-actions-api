@@ -1,4 +1,5 @@
 const LOGIN_PATH = "/login";
+const REGISTER_PATH = "/register";
 
 export const AuthClient = {
   login(body) {
@@ -9,4 +10,13 @@ export const AuthClient = {
       sensitive: true,
     });
   },
+
+  register(body) {
+    return cy.requestApi({
+      method: "POST",
+      url: REGISTER_PATH,
+      body,
+      sensitive: true,
+    });
+  }
 };
