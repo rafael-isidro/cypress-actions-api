@@ -16,6 +16,23 @@ describe("POST - /login - Should authenticate the user", () => {
     AuthClient.login(this.authData.invalidLogin).then((response) => {
       expect(response.status).to.eq(400);
       expect(response.body).to.have.property("error");
+      expect(response.body.error).to.eq("user not found");
+    });
+  });
+
+  it("TC-003: Should not authenticate the user with missing password", function () {
+    AuthClient.login(this.authData.missingPassword).then((response) => {
+      expect(response.status).to.eq(400);
+      expect(response.body).to.have.property("error");
+      expect(response.body.error).to.eq("Missing password");
+    });
+  });
+
+  it("TC-004: Should not authenticate the user with missing email", function () {
+    AuthClient.login(this.authData.missingEmail).then((response) => {
+      expect(response.status).to.eq(400);
+      expect(response.body).to.have.property("error");
+      expect(response.body.error).to.eq("Missing email or username");
     });
   });
 });

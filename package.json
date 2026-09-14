@@ -10,6 +10,7 @@
     "test:resources": "cypress run --spec \"cypress/e2e/resources/**/*.cy.js\""
   },
   "devDependencies": {
-    "cypress": "^16.0.0"
+    "cypress": "^16.0.0",
+    "cypress-plugin-api": "^2.12.3"
   }
 }
