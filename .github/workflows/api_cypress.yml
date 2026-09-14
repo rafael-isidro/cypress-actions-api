@@ -32,19 +32,20 @@ jobs:
       - name: Run Cypress
         run: npm test
 
-      - name: List report files
+      - name: List generated reports
         if: always()
         run: |
           echo "Arquivos gerados:"
-          find cypress/reports -type f 2>/dev/null || true
+          find cypress/results -type f 2>/dev/null || true
 
       - name: Upload Cypress JSON Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: cypress-json-results
-          path: cypress/reports/.jsons/
+          path: cypress/results/
           if-no-files-found: error
+
 
   report:
     runs-on: ubuntu-latest
@@ -70,20 +71,21 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: cypress-json-results
-          path: cypress/reports/.jsons/
+          path: cypress/results/
 
-      - name: List downloaded files
+      - name: List downloaded reports
         run: |
           echo "JSONs baixados:"
-          find cypress/reports -type f
+          find cypress/results -type f
 
-      - name: Generate Mochawesome Report
+      - name: Merge Mochawesome JSONs
         run: |
-          npx mochawesome-merge "cypress/reports/.jsons/*.json" > cypress/reports/report.json
+          npx mochawesome-merge "cypress/results/*.json" \
+            -o cypress/results/mochawesome.json
 
       - name: Generate HTML Report
         run: |
-          npx marge cypress/reports/report.json \
+          npx marge cypress/results/mochawesome.json \
             -f cypress-report \
             -o cypress/reports
 
@@ -93,3 +95,4 @@ jobs:
         with:
           name: cypress-report
           path: cypress/reports/
+          if-no-files-found: error
