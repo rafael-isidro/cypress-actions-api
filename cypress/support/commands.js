@@ -16,3 +16,4 @@ Cypress.Commands.add("requestApi", (options = {}) => {
     return cy.api(reqOptions);
   });
 });
+
